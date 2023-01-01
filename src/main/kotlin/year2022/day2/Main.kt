@@ -6,4 +6,5 @@ fun main() {
     val day2 = Day2(input)
 
     println("Part 1: ${day2.part1()}")
+    println("Part 2: ${day2.part2()}")
 }
