@@ -6,8 +6,8 @@ class Day3(private val input: String) {
         return getPrioritySum()
     }
 
-    fun part2() {
-
+    fun part2(): Int {
+        return getGroupPrioritySum()
     }
 
     private fun getPrioritySum(): Int {
@@ -17,6 +17,33 @@ class Day3(private val input: String) {
             prioritySum += getPriority(rucksack)
         }
         return prioritySum
+    }
+
+    private fun getGroupPrioritySum(): Int {
+
+        var prioritySum = 0
+        val group = mutableListOf<String>()
+        val rucksacks = input.split("\n")
+
+        for (index in rucksacks.indices) {
+            if (index % 3 == 0 && index != 0) {
+                prioritySum += getGroupPriority(group)
+                group.clear()
+            }
+            group.add(rucksacks[index])
+        }
+        prioritySum += getGroupPriority(group)
+        return prioritySum
+    }
+
+    private fun getGroupPriority(group: MutableList<String>): Int {
+
+        for (item in group.first()) {
+            if (item in group[1] && item in group[2]) {
+                return getPriorityValue(item)
+            }
+        }
+        return 0
     }
 
     private fun getPriority(rucksack: String): Int {
