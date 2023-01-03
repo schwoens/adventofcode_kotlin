@@ -1,13 +1,13 @@
 package year2022.day7
 
-class FileTree(private val root: Directory) {
+class FileTree(private val root: Directory, private val totalSpace: Int) {
 
     companion object {
 
-        fun fromTerminalOutput(terminalOutput: String): FileTree {
+        fun fromTerminalOutput(terminalOutput: String, totalSpace: Int): FileTree {
 
             var currentDirectory = Directory("/")
-            val fileTree = FileTree(currentDirectory)
+            val fileTree = FileTree(currentDirectory, totalSpace)
 
             var split: List<String>
 
@@ -45,5 +45,18 @@ class FileTree(private val root: Directory) {
             }
         }
         return sum
+    }
+
+    fun getAvailableSpace(): Int {
+        return totalSpace - root.getSize()
+    }
+
+    fun findSmallestDeleteSize(neededSpace: Int): Int {
+
+        val deleteMinimum = neededSpace - getAvailableSpace()
+        var sizes = root.getSizes()
+        sizes = sizes.filter { it >= deleteMinimum }
+
+        return sizes.min()
     }
 }
