@@ -8,6 +8,10 @@ class Day8(private val input: String) {
         return countVisibleTrees()
     }
 
+    fun part2(): Int {
+        return getHighestScenicScore()
+    }
+
     private fun countVisibleTrees(): Int {
 
         var count = 0
@@ -75,6 +79,64 @@ class Day8(private val input: String) {
         }
 
         return visible
+    }
+
+    private fun getHighestScenicScore(): Int {
+        val grid = getGrid()
+        val scenicScores = mutableSetOf<Int>()
+
+        for (y in grid.indices) {
+            for (x in grid[y].indices) {
+                scenicScores.add(getScenicScore(x, y, grid))
+            }
+        }
+        return scenicScores.max()
+    }
+
+    private fun getScenicScore(x: Int, y: Int, grid: List<List<Int>>): Int {
+        val height = grid[y][x]
+
+        var rightView = 0
+        var xray = 1
+        while (x + xray < grid[y].size) {
+            rightView++
+            if (grid[y][x + xray] >= height) {
+                break
+            }
+            xray++
+        }
+
+        var leftView = 0
+        xray = -1
+        while (x + xray >= 0) {
+            leftView++
+            if (grid[y][x + xray] >= height) {
+                break
+            }
+            xray--
+        }
+
+        var downView = 0
+        var yray = 1
+        while (y + yray < grid.size) {
+            downView++
+            if (grid[y + yray][x] >= height) {
+                break
+            }
+            yray++
+        }
+
+        var upView = 0
+        yray = -1
+        while (y + yray >= 0) {
+            upView++
+            if (grid[y + yray][x] >= height) {
+                break
+            }
+            yray--
+        }
+
+        return rightView * leftView * downView * upView
     }
 
     private fun getGrid(): List<List<Int>> {
